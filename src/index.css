@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+@layer components {
+  .text-primary {
+    @apply text-blue-500;
+  }
+  
+  .bg-primary {
+    @apply bg-blue-500;
+  }
+  
+  .border-primary {
+    @apply border-blue-500;
+  }
+  
+  .hover\:bg-primary:hover {
+    @apply bg-blue-500;
+  }
+  
+  .focus\:ring-primary:focus {
+    @apply ring-blue-500;
+  }
+}

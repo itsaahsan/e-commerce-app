@@ -1,0 +1,16 @@
+import React from 'react';
+
+const Logo = ({ className = "" }) => {
+  return (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      viewBox="0 0 100 100" 
+      className={`w-10 h-10 ${className}`}
+    >
+      <rect width="100" height="100" fill="#3B82F6" rx="20"/>
+      <text x="50" y="58" font-family="Arial, sans-serif" font-size="48" fill="white" text-anchor="middle" font-weight="bold">S</text>
+    </svg>
+  );
+};
+
+export default Logo;

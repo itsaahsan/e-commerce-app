@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ShoppingCart, Search, Heart, User, Package, Scale, LogOut, ClipboardList, Grid } from 'lucide-react'
 import { useStore } from '../store/useStore'
 import { useAuth } from '../contexts/AuthContext'
+import Logo from './Logo'
 
 const Header = () => {
   const { cart, searchTerm, setSearchTerm, getCartItemsCount, compareList } = useStore()
@@ -19,8 +20,9 @@ const Header = () => {
     <header className="bg-white shadow-md sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="text-2xl font-bold text-primary">
-            ShopHub
+          <Link to="/" className="flex items-center">
+            <Logo className="mr-3" />
+            <span className="text-2xl font-bold text-primary">ShopHub</span>
           </Link>
           
           <div className="flex-1 max-w-md mx-8">

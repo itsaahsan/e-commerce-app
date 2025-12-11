@@ -67,7 +67,7 @@ const Header = () => {
                 </Link>
                 <Link to="/profile" className="text-gray-600 hover:text-primary flex items-center">
                   <User className="w-6 h-6" />
-                  <span className="ml-1 hidden md:inline">{user.name.split(' ')[0]}</span>
+                  <span className="ml-1 hidden md:inline">{user?.name?.split(' ')[0]}</span>
                 </Link>
                 <button 
                   onClick={handleLogout}

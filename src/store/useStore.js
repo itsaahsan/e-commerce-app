@@ -1,97 +1,47 @@
 import { create } from 'zustand'
 
-// Generate 100 products across different categories
+// Generate 500 products across different categories
 const generateProducts = () => {
   const categories = ['Electronics', 'Fashion', 'Home & Garden', 'Sports', 'Books', 'Beauty', 'Toys', 'Automotive']
   const productNames = {
-    Electronics: ['Wireless Headphones', 'Smartphone', 'Laptop', 'Tablet', 'Smart Watch', 'Bluetooth Speaker', 'Gaming Console', 'Camera', 'Smart TV', 'VR Headset'],
-    Fashion: ['T-Shirt', 'Jeans', 'Sneakers', 'Jacket', 'Dress', 'Sunglasses', 'Backpack', 'Watch', 'Hat', 'Scarf'],
-    'Home & Garden': ['Coffee Maker', 'Blender', 'Vacuum Cleaner', 'Air Purifier', 'Lamp', 'Plant Pot', 'Cushion', 'Blanket', 'Cookware Set', 'Garden Tools'],
-    Sports: ['Yoga Mat', 'Dumbbells', 'Running Shoes', 'Basketball', 'Tennis Racket', 'Swimming Goggles', 'Fitness Tracker', 'Water Bottle', 'Sports Bag', 'Resistance Bands'],
-    Books: ['Fiction Novel', 'Non-Fiction Book', 'Biography', 'Cookbook', 'Self-Help Book', 'Science Book', 'History Book', 'Art Book', 'Children Book', 'Poetry Collection'],
-    Beauty: ['Face Cream', 'Lipstick', 'Shampoo', 'Perfume', 'Makeup Kit', 'Skincare Set', 'Hair Dryer', 'Nail Polish', 'Face Mask', 'Body Lotion'],
-    Toys: ['Action Figure', 'Board Game', 'Puzzle', 'RC Car', 'Doll', 'Building Blocks', 'Stuffed Animal', 'Musical Instrument', 'Art Supplies', 'Educational Toy'],
-    Automotive: ['Car Charger', 'Seat Cover', 'Floor Mat', 'Steering Wheel Cover', 'Car Air Freshener', 'Tire Pressure Gauge', 'Jump Starter', 'Car Vacuum', 'Phone Mount', 'Dash Cam']
+    Electronics: ['Wireless Headphones', 'Smartphone', 'Laptop', 'Tablet', 'Smart Watch', 'Bluetooth Speaker', 'Gaming Console', 'Camera', 'Smart TV', 'VR Headset', 'USB-C Cable', 'Power Bank', 'Wireless Mouse', 'Mechanical Keyboard', 'Monitor', 'Webcam', 'Microphone', 'Charger', 'Screen Protector', 'Phone Case'],
+    Fashion: ['T-Shirt', 'Jeans', 'Sneakers', 'Jacket', 'Dress', 'Sunglasses', 'Backpack', 'Watch', 'Hat', 'Scarf', 'Sweater', 'Shorts', 'Boots', 'Socks', 'Belt', 'Tie', 'Gloves', 'Hoodie', 'Polo Shirt', 'Leggings'],
+    'Home & Garden': ['Coffee Maker', 'Blender', 'Vacuum Cleaner', 'Air Purifier', 'Lamp', 'Plant Pot', 'Cushion', 'Blanket', 'Cookware Set', 'Garden Tools', 'Bed Sheet', 'Pillow', 'Towel', 'Rug', 'Mirror', 'Shelf', 'Desk', 'Chair', 'Table', 'Door Mat'],
+    Sports: ['Yoga Mat', 'Dumbbells', 'Running Shoes', 'Basketball', 'Tennis Racket', 'Swimming Goggles', 'Fitness Tracker', 'Water Bottle', 'Sports Bag', 'Resistance Bands', 'Jump Rope', 'Kettlebell', 'Foam Roller', 'Gym Gloves', 'Headband', 'Wrist Wrap', 'Shin Guard', 'Knee Pad', 'Elbow Pad', 'Skipping Rope'],
+    Books: ['Fiction Novel', 'Non-Fiction Book', 'Biography', 'Cookbook', 'Self-Help Book', 'Science Book', 'History Book', 'Art Book', 'Children Book', 'Poetry Collection', 'Mystery Novel', 'Romance Novel', 'Fantasy Book', 'Thriller', 'Comic Book', 'Graphic Novel', 'Travel Guide', 'Business Book', 'Philosophy Book', 'Educational Book'],
+    Beauty: ['Face Cream', 'Lipstick', 'Shampoo', 'Perfume', 'Makeup Kit', 'Skincare Set', 'Hair Dryer', 'Nail Polish', 'Face Mask', 'Body Lotion', 'Conditioner', 'Face Wash', 'Moisturizer', 'Sunscreen', 'Serum', 'Toner', 'Cleanser', 'Exfoliator', 'Eye Cream', 'Lip Balm'],
+    Toys: ['Action Figure', 'Board Game', 'Puzzle', 'RC Car', 'Doll', 'Building Blocks', 'Stuffed Animal', 'Musical Instrument', 'Art Supplies', 'Educational Toy', 'Video Game', 'Trading Card', 'Model Kit', 'Toy Car', 'Toy Train', 'Kite', 'Yo-Yo', 'Frisbee', 'Skateboard', 'Scooter'],
+    Automotive: ['Car Charger', 'Seat Cover', 'Floor Mat', 'Steering Wheel Cover', 'Car Air Freshener', 'Tire Pressure Gauge', 'Jump Starter', 'Car Vacuum', 'Phone Mount', 'Dash Cam', 'Car Organizer', 'Windshield Shade', 'Car Wax', 'Air Filter', 'Oil Filter', 'Brake Pad', 'Spark Plug', 'Battery', 'Jumper Cable', 'Car Cover']
   }
   
-  const adjectives = ['Premium', 'Deluxe', 'Pro', 'Smart', 'Eco', 'Organic', 'Luxury', 'Classic', 'Modern', 'Stylish']
-  
-  // Category-specific image URLs using placeholder images
-  const categoryImageUrls = {
-    Electronics: [
-      'https://placehold.co/500x500/4F46E5/FFFFFF?text=Electronics',
-      'https://placehold.co/500x500/7C3AED/FFFFFF?text=Tech+Gear',
-      'https://placehold.co/500x500/2563EB/FFFFFF?text=Devices',
-      'https://placehold.co/500x500/0D9488/FFFFFF?text=Gadgets'
-    ],
-    Fashion: [
-      'https://placehold.co/500x500/EC4899/FFFFFF?text=Fashion',
-      'https://placehold.co/500x500/F43F5E/FFFFFF?text=Clothing',
-      'https://placehold.co/500x500/D946EF/FFFFFF?text=Accessories',
-      'https://placehold.co/500x500/8B5CF6/FFFFFF?text=Style'
-    ],
-    'Home & Garden': [
-      'https://placehold.co/500x500/10B981/FFFFFF?text=Home',
-      'https://placehold.co/500x500/84CC16/FFFFFF?text=Garden',
-      'https://placehold.co/500x500/F59E0B/FFFFFF?text=Decor',
-      'https://placehold.co/500x500/EF4444/FFFFFF?text=Living'
-    ],
-    Sports: [
-      'https://placehold.co/500x500/0EA5E9/FFFFFF?text=Sports',
-      'https://placehold.co/500x500/3B82F6/FFFFFF?text=Fitness',
-      'https://placehold.co/500x500/06B6D4/FFFFFF?text=Exercise',
-      'https://placehold.co/500x500/14B8A6/FFFFFF?text=Active'
-    ],
-    Books: [
-      'https://placehold.co/500x500/6366F1/FFFFFF?text=Books',
-      'https://placehold.co/500x500/8B5CF6/FFFFFF?text=Reading',
-      'https://placehold.co/500x500/A855F7/FFFFFF?text=Literature',
-      'https://placehold.co/500x500/C084FC/FFFFFF?text=Knowledge'
-    ],
-    Beauty: [
-      'https://placehold.co/500x500/EC4899/FFFFFF?text=Beauty',
-      'https://placehold.co/500x500/F43F5E/FFFFFF?text=Skincare',
-      'https://placehold.co/500x500/D946EF/FFFFFF?text=Cosmetics',
-      'https://placehold.co/500x500/EAB308/FFFFFF?text=Makeup'
-    ],
-    Toys: [
-      'https://placehold.co/500x500/F97316/FFFFFF?text=Toys',
-      'https://placehold.co/500x500/F59E0B/FFFFFF?text=Games',
-      'https://placehold.co/500x500/EAB308/FFFFFF?text=Fun',
-      'https://placehold.co/500x500/84CC16/FFFFFF?text=Play'
-    ],
-    Automotive: [
-      'https://placehold.co/500x500/64748B/FFFFFF?text=Auto',
-      'https://placehold.co/500x500/94A3B8/FFFFFF?text=Car+Parts',
-      'https://placehold.co/500x500/6B7280/FFFFFF?text=Vehicle',
-      'https://placehold.co/500x500/475569/FFFFFF?text=Accessories'
-    ]
-  }
+  const adjectives = ['Premium', 'Deluxe', 'Pro', 'Smart', 'Eco', 'Organic', 'Luxury', 'Classic', 'Modern', 'Stylish', 'Advanced', 'Professional', 'Ultra', 'Super', 'Elite']
   
   const products = []
   
-  for (let i = 1; i <= 100; i++) {
+  for (let i = 1; i <= 500; i++) {
     const category = categories[Math.floor(Math.random() * categories.length)]
     const productNameBase = productNames[category][Math.floor(Math.random() * productNames[category].length)]
-    const productName = Math.random() > 0.7 
+    const productName = Math.random() > 0.6 
       ? `${adjectives[Math.floor(Math.random() * adjectives.length)]} ${productNameBase}` 
       : productNameBase
     
-    // Select a category-specific image URL
-    const imageUrls = categoryImageUrls[category] || [
-      'https://placehold.co/500x500/6B7280/FFFFFF?text=Product'
-    ]
-    const imageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)]
+    const basePrice = parseFloat((Math.random() * 500 + 10).toFixed(2))
+    const discount = Math.random() > 0.7 ? Math.floor(Math.random() * 40) + 5 : 0
+    const discountedPrice = discount > 0 ? parseFloat((basePrice * (1 - discount / 100)).toFixed(2)) : basePrice
     
     products.push({
       id: i,
       name: productName,
-      price: parseFloat((Math.random() * 500 + 10).toFixed(2)),
-      image: imageUrl,
+      price: discountedPrice,
+      originalPrice: basePrice,
+      discount: discount,
       category: category,
       rating: parseFloat((Math.random() * 4 + 1).toFixed(1)),
       reviews: Math.floor(Math.random() * 500),
-      description: `High-quality ${productName.toLowerCase()} in the ${category} category. Perfect for everyday use.`
+      stock: Math.floor(Math.random() * 100) + 1,
+      description: `High-quality ${productName.toLowerCase()} in the ${category} category. Perfect for everyday use.`,
+      shipping: Math.random() > 0.5 ? 'Free Shipping' : `$${Math.floor(Math.random() * 20) + 5}`,
+      inStock: Math.random() > 0.1
     })
   }
   

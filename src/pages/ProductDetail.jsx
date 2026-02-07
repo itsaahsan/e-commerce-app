@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react' // Keep useState for quantity
 import { useParams } from 'react-router-dom'
 import { Star, Heart, ShoppingCart, Share2, Scale } from 'lucide-react'
 import { useStore } from '../store/useStore'
@@ -8,9 +8,8 @@ import toast from 'react-hot-toast'
 
 const ProductDetail = () => {
   const { id } = useParams()
-  const { products, addToCart, addToWishlist, addToCompare, addToRecentlyViewed } = useStore()
-  const [selectedImage, setSelectedImage] = useState(0)
-  const [quantity, setQuantity] = useState(1)
+  const { products, addToCart, addToWishlist, addToCompare, addToRecentlyViewed, getUserById } = useStore()
+  const [quantity, setQuantity] = useState(1) // Keep quantity state
   
   const product = products.find(p => p.id === parseInt(id))
   
@@ -24,8 +23,6 @@ const ProductDetail = () => {
   if (!product) {
     return <div className="container mx-auto px-4 py-8">Product not found</div>
   }
-
-  const images = [product.image, product.image, product.image] // Mock multiple images
 
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) {
@@ -52,34 +49,17 @@ const ProductDetail = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-        {/* Product Images */}
-        <div>
-          <div className="mb-4">
-            <img
-              src={images[selectedImage]}
-              alt={product.name}
-              className="w-full h-96 object-cover rounded-lg"
-            />
-          </div>
-          <div className="flex space-x-2">
-            {images.map((image, index) => (
-              <button
-                key={index}
-                onClick={() => setSelectedImage(index)}
-                className={`w-20 h-20 rounded-lg overflow-hidden border-2 ${
-                  selectedImage === index ? 'border-primary' : 'border-gray-200'
-                }`}
-              >
-                <img src={image} alt="" className="w-full h-full object-cover" />
-              </button>
-            ))}
-          </div>
+        {/* Removed Product Images section */}
+        <div className="w-full h-96 bg-gray-200 flex items-center justify-center text-gray-500 rounded-lg">
+          No Image
         </div>
 
         {/* Product Info */}
         <div>
           <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
-          
+          <p className="text-sm text-gray-600 mb-2">
+            Sold by: {getUserById(product.sellerId)?.name || `ID: ${product.sellerId}`}
+          </p>
           <div className="flex items-center mb-4">
             <div className="flex items-center">
               {[...Array(5)].map((_, i) => (
@@ -120,7 +100,7 @@ const ProductDetail = () => {
           <div className="flex space-x-4 mb-6">
             <button
               onClick={handleAddToCart}
-              className="flex-1 bg-primary text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2"
+              className="flex-1 bg-primary text-white py-3 px-6 rounded-lg hover:bg-primary-dark transition-colors flex items-center justify-center space-x-2"
             >
               <ShoppingCart className="w-5 h-5" />
               <span>Add to Cart</span>

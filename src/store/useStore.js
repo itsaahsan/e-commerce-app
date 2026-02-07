@@ -1,4 +1,6 @@
 import { create } from 'zustand'
+import { mockOrders } from '../data/orders'
+import { mockUsers } from '../data/users'
 
 // Generate 500 products across different categories
 const generateProducts = () => {
@@ -17,20 +19,36 @@ const generateProducts = () => {
   const adjectives = ['Premium', 'Deluxe', 'Pro', 'Smart', 'Eco', 'Organic', 'Luxury', 'Classic', 'Modern', 'Stylish', 'Advanced', 'Professional', 'Ultra', 'Super', 'Elite']
   
   const products = []
-  
+  const sellers = [101, 102, 103, 104, 105]; // Mock seller IDs
+
   for (let i = 1; i <= 500; i++) {
     const category = categories[Math.floor(Math.random() * categories.length)]
     const productNameBase = productNames[category][Math.floor(Math.random() * productNames[category].length)]
-    const productName = Math.random() > 0.6 
-      ? `${adjectives[Math.floor(Math.random() * adjectives.length)]} ${productNameBase}` 
+    const productName = Math.random() > 0.6
+      ? `${adjectives[Math.floor(Math.random() * adjectives.length)]} ${productNameBase}`
       : productNameBase
-    
+
     const basePrice = parseFloat((Math.random() * 500 + 10).toFixed(2))
     const discount = Math.random() > 0.7 ? Math.floor(Math.random() * 40) + 5 : 0
     const discountedPrice = discount > 0 ? parseFloat((basePrice * (1 - discount / 100)).toFixed(2)) : basePrice
-    
+
+    // Generate a random image URL using a placeholder service
+    const imageCategories = {
+      'Electronics': 'electronics',
+      'Fashion': 'clothing',
+      'Home & Garden': 'furniture',
+      'Sports': 'sports',
+      'Books': 'books',
+      'Beauty': 'beauty',
+      'Toys': 'toys',
+      'Automotive': 'car'
+    };
+
+    const imageUrl = `https://placehold.co/600x600/EEE/31343C?text=${encodeURIComponent(productNameBase.replace(/\s+/g, '+'))}`;
+
     products.push({
       id: i,
+      sellerId: sellers[Math.floor(Math.random() * sellers.length)],
       name: productName,
       price: discountedPrice,
       originalPrice: basePrice,
@@ -41,7 +59,8 @@ const generateProducts = () => {
       stock: Math.floor(Math.random() * 100) + 1,
       description: `High-quality ${productName.toLowerCase()} in the ${category} category. Perfect for everyday use.`,
       shipping: Math.random() > 0.5 ? 'Free Shipping' : `$${Math.floor(Math.random() * 20) + 5}`,
-      inStock: Math.random() > 0.1
+      inStock: Math.random() > 0.1,
+      image: imageUrl,
     })
   }
   
@@ -51,6 +70,57 @@ const generateProducts = () => {
 export const useStore = create((set, get) => ({
   // Products
   products: generateProducts(),
+  addProduct: (product) => set((state) => ({
+    products: [{ 
+      ...product, 
+      id: Date.now(),
+    }, ...state.products]
+  })),
+  updateProduct: (updatedProduct) => set((state) => ({
+    products: state.products.map(p => p.id === updatedProduct.id ? updatedProduct : p)
+  })),
+  deleteProduct: (productId) => set((state) => ({
+    products: state.products.filter(p => p.id !== productId)
+  })),
+  // Orders
+  orders: mockOrders,
+  getOrdersBySeller: (sellerId) => {
+    const { orders, products } = get()
+    const sellerOrders = orders.map(order => {
+      const sellerItems = order.items.filter(item => {
+        const product = products.find(p => p.id === item.productId);
+        return product && product.sellerId === sellerId;
+      });
+
+      if (sellerItems.length > 0) {
+        return {
+          ...order,
+          items: sellerItems,
+          total: sellerItems.reduce((acc, item) => {
+            const product = products.find(p => p.id === item.productId);
+            return acc + (product ? product.price * item.quantity : 0);
+          }, 0)
+        };
+      }
+      return null;
+    }).filter(Boolean);
+    
+    return sellerOrders;
+  },
+  updateOrderStatus: (orderId, newStatus) => set(state => ({
+    orders: state.orders.map(order => order.id === orderId ? { ...order, status: newStatus } : order)
+  })),
+
+  // Users
+  users: mockUsers,
+  getUsers: () => get().users,
+  getUserById: (userId) => get().users.find(u => u.id === userId),
+  updateUserRole: (userId, role) => set(state => ({
+    users: state.users.map(u => u.id === userId ? { ...u, role } : u)
+  })),
+  deleteUser: (userId) => set(state => ({
+    users: state.users.filter(u => u.id !== userId)
+  })),
 
   // Cart
   cart: [],
@@ -147,5 +217,10 @@ export const useStore = create((set, get) => ({
       
       return matchesSearch && matchesCategory && matchesPrice && matchesRating
     })
+  },
+
+  getProductsBySeller: (sellerId) => {
+    const { products } = get()
+    return products.filter(product => product.sellerId === sellerId)
   }
 }))

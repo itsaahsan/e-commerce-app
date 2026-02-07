@@ -73,7 +73,7 @@ const Signup = () => {
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
+                className="rounded-t-md focus:z-10" // Only rounded-t-md, global input takes care of the rest
                 placeholder="Full Name"
               />
             </div>
@@ -89,7 +89,7 @@ const Signup = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
+                className="focus:z-10" // No specific rounding, global input takes care of it
                 placeholder="Email address"
               />
             </div>
@@ -104,7 +104,7 @@ const Signup = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
+                className="focus:z-10" // No specific rounding, global input takes care of it
                 placeholder="Password"
               />
             </div>
@@ -119,7 +119,7 @@ const Signup = () => {
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
+                className="rounded-b-md focus:z-10" // Only rounded-b-md, global input takes care of the rest
                 placeholder="Confirm Password"
               />
             </div>
@@ -129,7 +129,7 @@ const Signup = () => {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50"
+              className="group relative w-full flex justify-center btn-primary disabled:opacity-50"
             >
               {loading ? 'Creating account...' : 'Sign up'}
             </button>
@@ -137,7 +137,7 @@ const Signup = () => {
         </form>
         <div className="text-sm text-center">
           <span className="text-gray-600">Already have an account? </span>
-          <Link to="/login" className="font-medium text-primary hover:text-blue-500">
+          <Link to="/login" className="font-medium text-primary hover:text-primary-light">
             Sign in
           </Link>
         </div>

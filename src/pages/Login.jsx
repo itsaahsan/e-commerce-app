@@ -62,7 +62,7 @@ const Login = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
+                className="rounded-none rounded-t-md focus:z-10" // Retain rounded-none, rounded-t-md, focus:z-10 for specific layout
                 placeholder="Email address"
               />
             </div>
@@ -78,7 +78,7 @@ const Login = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
+                className="rounded-none rounded-b-md focus:z-10" // Retain rounded-none, rounded-b-md, focus:z-10 for specific layout
                 placeholder="Password"
               />
             </div>
@@ -90,7 +90,7 @@ const Login = () => {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded" // Checkbox styling is specific, keep as is for now
               />
               <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
                 Remember me
@@ -98,7 +98,7 @@ const Login = () => {
             </div>
 
             <div className="text-sm">
-              <a href="#" className="font-medium text-primary hover:text-blue-500">
+              <a href="#" className="font-medium text-primary hover:text-primary-light">
                 Forgot your password?
               </a>
             </div>
@@ -108,7 +108,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50"
+              className="group relative w-full flex justify-center btn-primary disabled:opacity-50" // Apply btn-primary
             >
               {loading ? 'Signing in...' : 'Sign in'}
             </button>
@@ -116,7 +116,7 @@ const Login = () => {
         </form>
         <div className="text-sm text-center">
           <span className="text-gray-600">Don't have an account? </span>
-          <Link to="/signup" className="font-medium text-primary hover:text-blue-500">
+          <Link to="/signup" className="font-medium text-primary hover:text-primary-light">
             Sign up
           </Link>
         </div>

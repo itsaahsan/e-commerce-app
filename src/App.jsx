@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './contexts/AuthContext'
 import Header from './components/Header'
+import Footer from './components/Footer'
 import Home from './pages/Home'
 import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
@@ -16,6 +17,9 @@ import CompareProducts from './components/CompareProducts'
 import ProductDetail from './pages/ProductDetail'
 import OrderHistoryPage from './pages/OrderHistory'
 import CategoriesPage from './pages/Categories'
+import ProtectedRoute from './components/ProtectedRoute'
+import AdminDashboard from './pages/AdminDashboard'
+import SellerDashboard from './pages/SellerDashboard'
 
 function App() {
   // Add error boundary for the entire app
@@ -23,24 +27,51 @@ function App() {
     return (
       <AuthProvider>
         <Router>
-          <div className="min-h-screen bg-gray-50">
+          <div className="min-h-screen flex flex-col bg-gray-50">
             <Header />
-            <main>
+            <main className="flex-grow">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/cart" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/wishlist" element={<Wishlist />} />
-                <Route path="/profile" element={<Profile />} />
+                <Route path="/checkout" element={
+                  <ProtectedRoute>
+                    <Checkout />
+                  </ProtectedRoute>
+                } />
+                <Route path="/wishlist" element={
+                  <ProtectedRoute>
+                    <Wishlist />
+                  </ProtectedRoute>
+                } />
+                <Route path="/profile" element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                } />
                 <Route path="/order-tracking" element={<OrderTracking />} />
                 <Route path="/compare" element={<CompareProducts />} />
                 <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-                <Route path="/order-history" element={<OrderHistoryPage />} />
+                <Route path="/order-history" element={
+                  <ProtectedRoute>
+                    <OrderHistoryPage />
+                  </ProtectedRoute>
+                } />
                 <Route path="/categories" element={<CategoriesPage />} />
+                <Route path="/admin" element={
+                  <ProtectedRoute roles={['admin']}>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/seller" element={
+                  <ProtectedRoute roles={['seller', 'admin']}>
+                    <SellerDashboard />
+                  </ProtectedRoute>
+                } />
               </Routes>
             </main>
+            <Footer />
             <Toaster position="top-right" />
             <LiveChat />
           </div>

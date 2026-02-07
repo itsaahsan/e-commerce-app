@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js' // Keep for structure but not used for mock payment
 import { useStore } from '../store/useStore'
+import { useAuth } from '../contexts/AuthContext'
+import { processMarketplacePayment } from '../utils/stripe'
 import toast from 'react-hot-toast'
 
 const CheckoutForm = () => {
-  const stripe = useStripe()
-  const elements = useElements()
+  const stripe = useStripe() // Still need for Elements context, but not directly used
+  const elements = useElements() // Still need for Elements context, but not directly used
   const { cart, getCartTotal, clearCart } = useStore()
+  const { user } = useAuth()
   const [loading, setLoading] = useState(false)
   const [customerInfo, setCustomerInfo] = useState({
     name: '',
@@ -21,43 +24,35 @@ const CheckoutForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     
-    if (!stripe || !elements) return
-    
+    // In a real app, you'd perform client-side validation here
+    if (!customerInfo.name || !customerInfo.email || !customerInfo.address || !customerInfo.city || !customerInfo.zipCode) {
+      toast.error('Please fill in all customer information fields.');
+      return;
+    }
+
+    if (!cart || cart.length === 0) {
+        toast.error('Your cart is empty. Please add items before checking out.');
+        return;
+    }
+
     setLoading(true)
     
-    const cardElement = elements.getElement(CardElement)
-    
     try {
-      // Create payment method
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
-        type: 'card',
-        card: cardElement,
-        billing_details: {
-          name: customerInfo.name,
-          email: customerInfo.email,
-          address: {
-            line1: customerInfo.address,
-            city: customerInfo.city,
-            postal_code: customerInfo.zipCode,
-          },
-        },
-      })
+      // Simulate marketplace payment processing
+      const response = await processMarketplacePayment(cart, user?.id);
 
-      if (error) {
-        toast.error(error.message)
-        setLoading(false)
-        return
-      }
-
-      // Simulate payment processing (in real app, you'd call your backend)
-      setTimeout(() => {
-        toast.success('Payment successful! Order placed.')
+      if (response.success) {
+        toast.success(response.message + ' Order placed.')
         clearCart()
-        setLoading(false)
-      }, 2000)
-
+        // In a real app, you'd likely redirect to an order confirmation page
+      } else {
+        toast.error(response.message || 'Payment failed. Please try again.')
+      }
+      
     } catch (error) {
-      toast.error('Payment failed. Please try again.')
+      toast.error('An unexpected error occurred during payment. Please try again.')
+      console.error('Payment processing error:', error);
+    } finally {
       setLoading(false)
     }
   }
@@ -123,20 +118,9 @@ const CheckoutForm = () => {
         />
       </div>
 
-      <div className="p-4 border border-gray-300 rounded-lg">
-        <CardElement
-          options={{
-            style: {
-              base: {
-                fontSize: '16px',
-                color: '#424770',
-                '::placeholder': {
-                  color: '#aab7c4',
-                },
-              },
-            },
-          }}
-        />
+      {/* Replaced CardElement with a message for mock payments */}
+      <div className="p-4 border border-gray-300 rounded-lg text-center text-gray-600">
+        Payment Gateway Integration (Mock) - Using simulated payment
       </div>
 
       <div className="bg-gray-50 p-4 rounded-lg">
@@ -147,10 +131,10 @@ const CheckoutForm = () => {
 
       <button
         type="submit"
-        disabled={!stripe || loading}
+        disabled={loading} // Changed to only disable on loading, as stripe/elements are not used for disabled state
         className="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? 'Processing...' : `Pay $${total.toFixed(2)}`}
+        {loading ? 'Processing...' : `Place Order & Pay ${total.toFixed(2)}`}
       </button>
     </form>
   )

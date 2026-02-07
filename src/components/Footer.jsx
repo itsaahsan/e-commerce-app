@@ -1,10 +1,12 @@
 import React from 'react';
 import { Facebook, Twitter, Instagram, Mail, MapPin, Phone, Globe, ArrowUp } from 'lucide-react';
 
+const currentYear = new Date().getFullYear();
+
 const Footer = () => {
   return (
     <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white pt-16 pb-8 mt-16 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+      <div className="absolute inset-0 bg-gray-800/10 opacity-20"></div>
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           <div className="space-y-4">
@@ -78,7 +80,7 @@ const Footer = () => {
         <div className="border-t border-gray-700 pt-8 text-center">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 mb-4 md:mb-0">
-              &copy; {new Date().getFullYear()} ShopHub. All rights reserved. Designed with ❤️ for shoppers worldwide.
+              &copy; {currentYear} ShopHub. All rights reserved. Designed with ❤️ for shoppers worldwide.
             </p>
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
